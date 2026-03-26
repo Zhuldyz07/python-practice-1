@@ -15,16 +15,16 @@ per_person = total / people
 
 # c) Formatted Output
 print("=" * 30)
-print(f"{'CAFE BILL':^30}")
+print("          CAFE BILL")
 print("=" * 30)
-print(f"Customer : {customer_name}")
-print(f"{item1_name} : {item1_price} KZT")
-print(f"{item2_name} : {item2_price} KZT")
+print("Customer : "+ customer_name)
+print(item1_name + " : " + str(item1_price) + " KZT")
+print(item2_name + " : " + str(item2_price) + " KZT")
 print("-" * 30)
-print(f"Subtotal : {subtotal} KZT")
-print(f"Tip (10%) : {tip} KZT")
-print(f"Total : {total} KZT")
-print(f"Per people : {per_person} KZT")
+print("Subtotal : " + str(subtotal) + " KZT")
+print("Tip (10%) : " + str(tip) + " KZT")
+print("Total : " + str(total) + " KZT")
+print("Per people : " + str(per_person) + " KZT")
 print("=" * 30)
 
 # d) Comparison
