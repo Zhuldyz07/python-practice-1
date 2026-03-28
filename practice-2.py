@@ -13,37 +13,38 @@ while item_name != 'done':
 
 print("Customer :" + customer_name.upper())
 print("Item :"+ str(item_count))
-print("Subtotal :"+ str(subtotal))
+print("Subtotal :"+ str(subtotal) + " KZT")
+
 # D2)
 hour = int(input("Enter current hour(0-23): "))
 print("-"*30)
 
-if hour>=6 and hour<=12:
+if hour>=6 and hour<12:
     discount = subtotal * 0.10
     discounted = subtotal - discount
     tip = discounted * 0.10
     total = discounted + tip
     print("Time period : Morning discount")
-    print("Discount : " + str(discount)+ "KZT")
-    print("Tip : " + str(tip)+ "KZT")
-    print("Total : " + str(total) + "KZT")
-elif hour>=12 and hour<=17:
+    print("Discount : " + str(discount)+ " KZT")
+    print("Tip : " + str(tip)+ " KZT")
+    print("Total : " + str(total) + " KZT")
+elif hour>=12 and hour<17:
     discount = 0.0
     tip = subtotal * 0.10
     total = subtotal + tip
     print("Time period : No discount")
-    print("Discount : " + str(discount)+ "KZT")
-    print("Tip : " + str(tip)+ "KZT")
-    print("Total : " + str(total) + "KZT")
-elif hour>=17 and hour<=22:
+    print("Discount : " + str(discount)+ " KZT")
+    print("Tip : " + str(tip)+ " KZT")
+    print("Total : " + str(total) + " KZT")
+elif hour>=17 and hour<22:
     discount = subtotal * 0.05
     discounted = subtotal - discount
     tip = discounted * 0.10
     total = discounted + tip
     print("Time period : Evening discount")
-    print("Discount : " + str(discount)+ "KZT")
-    print("Tip : " + str(tip)+ "KZT")
-    print("Total : " + str(total) + "KZT")
+    print("Discount : " + str(discount)+ " KZT")
+    print("Tip : " + str(tip)+ " KZT")
+    print("Total : " + str(total) + " KZT")
 else:
     print("Closed")
 print("-"*30)
