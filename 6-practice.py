@@ -103,6 +103,26 @@ class DataAnalyser:
         }
         return self.result
 
+    def lambda_map_filter(self):
+        print("-" * 30)
+        print("Lambda / Map / Filter")
+        print("-" * 30)
+
+        # filter: GPA > 3.8
+        high_gpa = list(filter(lambda s: s["GPA"] != "" and float(s["GPA"]) > 3.8, self.students))
+        print(f"Students with GPA > 3.8 : {len(high_gpa)}")
+
+        # map: extract GPA values
+        gpa_values = list(map(lambda s: float(s["GPA"]), filter(lambda s: s["GPA"] != "", self.students)))
+        print(f"GPA values (first 5) : {gpa_values[:5]}")
+
+        # filter: study_hours_per_day > 4
+        hard_workers = list(
+            filter(lambda s: s["study_hours_per_day"] != "" and float(s["study_hours_per_day"]) > 4, self.students))
+        print(f"Students studying > 4 hrs : {len(hard_workers)}")
+
+        print("-" * 30)
+
     def print_results(self):
         print("-" * 30)
         print("Top 10 Students by Exam Score")
@@ -149,6 +169,7 @@ if __name__ == "__main__":
 
     analyser = DataAnalyser(dl.students)
     analyser.analyse()
+    analyser.lambda_map_filter()
     analyser.print_results()
 
     saver = ResultSaver(analyser.result, "output/result.json")
