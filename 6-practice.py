@@ -71,9 +71,10 @@ class DataAnalyser:
 
         sorted_students = sorted(
             self.students,
-            key=safe_score,
+            key=lambda x: float(x["final_exam_score"]) if x["final_exam_score"] != "" else 0.0,
             reverse=True
         )
+
 
         top10 = sorted_students[:10]
 

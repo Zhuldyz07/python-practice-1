@@ -30,3 +30,5 @@ print("=" * 30)
 # d) Comparison
 print("Tip included: ", tip > 0)
 print("Bill over 5000 KZT:", total > 5000)
+
+# 123123123
