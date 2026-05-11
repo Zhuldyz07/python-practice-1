@@ -11,6 +11,7 @@ class DataAnalyser:
             print(f"{key}: {value}")
 
 
+
 class TopStudentsAnalyser(DataAnalyser):  # Сіздің Variant D
     def analyse(self):
         valid_students = list(filter(lambda s: s["final_exam_score"] != "", self.students))

@@ -3,6 +3,7 @@ class Report:
         self.analyser = analyser
         self.saver = saver
 
+
     def generate(self):
         self.analyser.analyse()
         self.analyser.print_results()

@@ -8,7 +8,6 @@ if __name__ == "__main__":
         exit()
     fm.create_output_folder()
 
-
     dl = DataLoader("students.csv")
     students_data = dl.load()
     dl.preview()
@@ -18,6 +17,7 @@ if __name__ == "__main__":
     saver = ResultSaver(analyser.result, "output/result.json")
     report = Report(analyser, saver)
     report.generate()
+
 
 
 

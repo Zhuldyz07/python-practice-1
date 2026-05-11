@@ -5,6 +5,7 @@ class DataLoader:
         self.filename = filename
         self.students = []
 
+
     def load(self):
         print("Loading data...")
         try:
