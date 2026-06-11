@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block title %}{{ book.title }} — LMS{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center gap-3 mb-4">
+  <a href="/books" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left"></i> Back</a>
+  <h2 class="fw-bold mb-0">Book Details</h2>
+</div>
+
+<div class="row g-4">
+  <!-- LEFT: Book info -->
+  <div class="col-lg-5">
+    <div class="card lms-card h-100">
+      <div class="card-body p-4">
+        <div class="lms-book-icon text-center mb-3">
+          <i class="bi bi-journal-bookmark-fill text-primary" style="font-size: 4rem;"></i>
+        </div>
+        <h4 class="fw-bold text-center mb-1">{{ book.title }}</h4>
+        <p class="text-muted text-center mb-3">by {{ book.author }}</p>
+
+        <hr>
+
+        <dl class="row mb-0">
+          <dt class="col-5 text-muted">Category</dt>
+          <dd class="col-7">{{ book.category_name or '—' }}</dd>
+
+          <dt class="col-5 text-muted">ISBN</dt>
+          <dd class="col-7 font-monospace">{{ book.isbn or '—' }}</dd>
+
+          <dt class="col-5 text-muted">Published</dt>
+          <dd class="col-7">{{ book.published_year or '—' }}</dd>
+
+          <dt class="col-5 text-muted">Total Copies</dt>
+          <dd class="col-7">{{ book.total_copies }}</dd>
+
+          <dt class="col-5 text-muted">Available</dt>
+          <dd class="col-7">
+            {% if book.available_copies > 0 %}
+              <span class="badge bg-success fs-6">{{ book.available_copies }} available</span>
+            {% else %}
+              <span class="badge bg-danger fs-6">None available</span>
+            {% endif %}
+          </dd>
+
+          <dt class="col-5 text-muted">Added</dt>
+          <dd class="col-7">{{ book.created_at.strftime('%b %d, %Y') }}</dd>
+        </dl>
+
+        {% if book.description %}
+          <hr>
+          <p class="text-muted small mb-0">{{ book.description }}</p>
+        {% endif %}
+
+        <hr>
+
+        <div class="d-flex flex-column gap-2">
+          {% if book.available_copies > 0 %}
+            <a href="/borrowings/borrow?book_id={{ book.id }}" class="btn btn-primary">
+              <i class="bi bi-arrow-right-circle me-1"></i> Lend This Book
+            </a>
+          {% endif %}
+          <a href="/reservations/add?book_id={{ book.id }}" class="btn btn-outline-indigo">
+            <i class="bi bi-bookmark-plus me-1"></i> Reserve This Book
+          </a>
+          <a href="/books/edit/{{ book.id }}" class="btn btn-outline-warning">
+            <i class="bi bi-pencil me-1"></i> Edit Book
+          </a>
+          <form method="POST" action="/books/delete/{{ book.id }}"
+                onsubmit="return confirm('Delete this book permanently?')">
+            <button type="submit" class="btn btn-outline-danger w-100">
+              <i class="bi bi-trash me-1"></i> Delete Book
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Borrowing history -->
+  <div class="col-lg-7">
+    <div class="card lms-card">
+      <div class="card-header">
+        <h6 class="mb-0 fw-semibold"><i class="bi bi-clock-history me-2"></i>Borrowing History (last 10)</h6>
+      </div>
+      <div class="card-body p-0">
+        {% if history %}
+          <div class="table-responsive">
+            <table class="table table-hover mb-0 lms-table">
+              <thead><tr>
+                <th>Member</th><th>Borrowed</th><th>Due Date</th><th>Returned</th><th>Status</th>
+              </tr></thead>
+              <tbody>
+                {% for h in history %}
+                <tr>
+                  <td>
+                    <a href="/members/{{ h.member_id }}" class="text-decoration-none lms-link">
+                      {{ h.member_name }}
+                    </a>
+                  </td>
+                  <td class="text-muted small">{{ h.borrow_date }}</td>
+                  <td class="text-muted small">{{ h.due_date }}</td>
+                  <td class="text-muted small">{{ h.return_date or '—' }}</td>
+                  <td>
+                    {% if h.status == 'borrowed' %}
+                      <span class="badge bg-warning text-dark">Borrowed</span>
+                    {% elif h.status == 'returned' %}
+                      <span class="badge bg-success">Returned</span>
+                    {% else %}
+                      <span class="badge bg-danger">Overdue</span>
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <div class="p-4 text-center text-muted">
+            <i class="bi bi-inbox fs-3 d-block mb-2"></i>No borrowing history yet.
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
