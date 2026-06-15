@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Books - Stellar Spring LMS</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="navbar">
+    <b>Stellar Spring LMS</b>
+    <a href="/">Home</a>
+    <a href="/books">Books</a>
+    <a href="/checkouts">Checkouts</a>
+    <a href="/ratings">Ratings</a>
+
+    {% if user and user.role == 'admin' %}
+        <a href="/users">Users</a>
+    {% endif %}
+
+    <a href="/logout">Logout</a>
+</div>
+
+<div class="container">
+
+    <div class="page-title">
+        <h1>Books Catalog</h1>
+        <p>Search books, borrow available books, and rate them from 1 to 10.</p>
+    </div>
+
+    {% if user and user.role == 'admin' %}
+        <div class="card">
+            <a class="btn" href="/books/add">Add New Book</a>
+        </div>
+    {% endif %}
+
+    <div class="card">
+        <form method="GET" action="/books" class="filter-form">
+            <input type="text" name="search" placeholder="Search by title or author" value="{{ search }}">
+
+            <select name="genre_id">
+                <option value="">All genres</option>
+                {% for genre in genres %}
+                    <option value="{{ genre.id }}" {% if selected_genre == genre.id|string %}selected{% endif %}>
+                        {{ genre.name }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <select name="availability">
+                <option value="">All books</option>
+                <option value="available" {% if availability == 'available' %}selected{% endif %}>Available</option>
+                <option value="not_available" {% if availability == 'not_available' %}selected{% endif %}>Not available</option>
+            </select>
+
+            <button type="submit">Search / Filter</button>
+            <a class="simple-link" href="/books">Clear</a>
+        </form>
+    </div>
+
+    <div class="card table-card">
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Book</th>
+                <th>Genre</th>
+                <th>Copies</th>
+                <th>Available</th>
+                <th>Rating</th>
+                <th>Actions</th>
+            </tr>
+
+            {% for book in books %}
+            <tr>
+                <td>{{ book.id }}</td>
+
+                <td>
+                    <b>{{ book.title }}</b><br>
+                    <span class="muted">by {{ book.author }}</span><br>
+                    {% if book.translator %}
+                        <span class="muted">Translator: {{ book.translator }}</span>
+                    {% endif %}
+                </td>
+
+                <td>{{ book.genre_name or '-' }}</td>
+                <td>{{ book.total_copies }}</td>
+                <td>{{ book.available_copies }}</td>
+                <td>{{ book.avg_rating }}/10</td>
+
+                <td>
+                    <div class="actions">
+                        {% if user %}
+                            {% if book.available_copies > 0 %}
+                                <form method="POST" action="/borrow/{{ book.id }}">
+                                    <button type="submit">Borrow</button>
+                                </form>
+                            {% endif %}
+
+                            <form method="POST" action="/rate/{{ book.id }}" class="rating-form">
+                                <select name="rating">
+                                    {% for i in range(1, 11) %}
+                                        <option value="{{ i }}">{{ i }}</option>
+                                    {% endfor %}
+                                </select>
+                                <button type="submit">Rate</button>
+                            </form>
+                        {% endif %}
+
+                        {% if user and user.role == 'admin' %}
+                            <a class="btn small-btn" href="/books/edit/{{ book.id }}">Edit</a>
+
+                            <form method="POST" action="/books/delete/{{ book.id }}">
+                                <button type="submit" onclick="return confirm('Delete this book?')">Delete</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        {% if books|length == 0 %}
+            <p>No books found.</p>
+        {% endif %}
+    </div>
+
+</div>
+
+</body>
+</html>
